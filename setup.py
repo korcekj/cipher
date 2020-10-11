@@ -23,6 +23,7 @@ setup(
     name='cipher',
     description='A simple commandline app for encrypting and decrypting your files',
     version='1.0.0',
+    py_modules=['cipher'],
     packages=find_packages(),  # list of all packages
     install_requires=install_requires,
     python_requires='>=3.8',  # any python greater than 3.8
