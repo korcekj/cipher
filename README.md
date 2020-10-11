@@ -4,7 +4,7 @@ A simple commandline app for encrypting and decrypting your files
 
 ## Manual
 ```bash
-  $ git clone 
+  $ git clone https://github.com/korcekj/cipher.git
   $ cd cipher
   $ python setup.py install
 ```
@@ -12,14 +12,14 @@ A simple commandline app for encrypting and decrypting your files
 ```bash
 $ cipher
 ```
-## Encrypt
+## Encryption
 `-in <file_path>`
 `-out <file_path>`
 `-k <file_path>`
 ```bash
 $ cipher e -in ./to_enc.txt
 ```
-## Decrypt
+## Decryption
 `-in <file_path>`
 `-out <file_path>`
 `-k <file_path>`

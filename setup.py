@@ -19,30 +19,28 @@ install_requires = [x.strip() for x in all_reqs if ('git+' not in x) and (
 
 dependency_links = [x.strip().replace('git+', '') for x in all_reqs if 'git+' not in x]
 
-setup (
- name = 'cver',
- description = 'A simple commandline app for searching and looking up opensource vulnerabilities',
- version = '1.0.0',
- packages = find_packages(), # list of all packages
- install_requires = install_requires,
- python_requires='>=2.7', # any python greater than 2.7
- entry_points='''
+setup(
+    name='cipher',
+    description='A simple commandline app for encrypting and decrypting your files',
+    version='1.0.0',
+    packages=find_packages(),  # list of all packages
+    install_requires=install_requires,
+    python_requires='>=3.8',  # any python greater than 3.8
+    entry_points='''
         [console_scripts]
-        cver=cver.__main__:main
+        cipher=__main__:main
     ''',
- author="Oyetoke Toby",
- keyword="cve, vuln, vulnerabilities, security, nvd",
- long_description=README,
- long_description_content_type="text/markdown",
- license='MIT',
- url='https://github.com/CITGuru/cver',
- download_url='https://github.com/CITGuru/cver/archive/1.0.0.tar.gz',
-  dependency_links=dependency_links,
-  author_email='oyetoketoby80@gmail.com',
-  classifiers=[
+    author="Jan Korcek",
+    keyword="cipher, encryption, decryption",
+    long_description=README,
+    long_description_content_type="text/markdown",
+    license='MIT',
+    url='https://github.com/korcekj/cipher.git',
+    download_url='https://github.com/korcekj/cipher/archive/master.zip',
+    dependency_links=dependency_links,
+    author_email='xkorcek@stuba.sk',
+    classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ]
 )
