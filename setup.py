@@ -28,7 +28,7 @@ setup(
     python_requires='>=3.8',  # any python greater than 3.8
     entry_points='''
         [console_scripts]
-        cipher=__main__:main
+        cipher=cipher:main
     ''',
     author="Jan Korcek",
     keyword="cipher, encryption, decryption",

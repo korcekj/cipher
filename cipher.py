@@ -2,12 +2,17 @@ import time
 import sys
 import click
 
-from cipher.cipher_file import *
+from src.cipher_file import *
 
 
 @click.group()
 def main():
-    pass
+    try:
+        pass
+    except CypherException as e:
+        print(str(e))
+    except Exception as e:
+        print(str(e))
 
 
 @main.command('e')
@@ -37,12 +42,7 @@ def enc_file(key, in_file, out_file):
 
 
 if __name__ == '__main__':
-    try:
-        args = sys.argv
-        if "--help" in args or len(args) == 1:
-            click.echo("Cipher CLI")
-        main()
-    except CypherException as e:
-        print(str(e))
-    except Exception as e:
-        print(str(e))
+    args = sys.argv
+    if "--help" in args or len(args) == 1:
+        click.echo("Cipher CLI")
+    main()
