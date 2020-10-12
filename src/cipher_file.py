@@ -11,16 +11,27 @@ class CypherException(Exception):
         super().__init__(message)
 
 
-def gen_key(key_size=256):
-    return Random.get_random_bytes(key_size // 8)  # 128 bits key
+def gen_key(key_dir, key_size=AES.block_size):
+    key = Random.get_random_bytes(key_size)  # 128 bits key
+    write_file(join_to_path(key_dir, 'secret.key'), key)
+    return key
 
 
-def gen_iv(iv_size=128):
-    return Random.get_random_bytes(iv_size // 8)  # 128 bits iv
+def get_key(key_file, key_size=AES.block_size):
+    key = read_file(key_file, key_size)
+    if len(key) < key_size:
+        raise CypherException(f"Incorrect key length ({len(key)})")
+    return key
 
 
-def is_file(path):
-    return os.path.isfile(path)
+def gen_iv(iv_size=AES.block_size):
+    return Random.get_random_bytes(iv_size)  # 128 bits iv
+
+
+def is_file(file):
+    if not file:
+        return False
+    return os.path.isfile(file)
 
 
 def get_dir(file):
@@ -29,16 +40,22 @@ def get_dir(file):
     return os.path.dirname(file)
 
 
-def get_abs_path(file):
-    if not file:
+def get_abs_path(path):
+    if not path:
         return None
-    return os.path.abspath(file)
+    return os.path.abspath(path)
 
 
-def get_basename(file):
+def get_basename(path):
+    if not path:
+        return None
+    return os.path.basename(path)
+
+
+def get_file_size(file):
     if not file:
         return None
-    return os.path.basename(file)
+    return os.path.getsize(file)
 
 
 def join_to_path(directory, file_name):
@@ -61,22 +78,20 @@ def write_file(file, data, mode='wb'):
         f.write(data)
 
 
-def encrypt_file(key_path, in_filename, out_filename=None, chunk_size=64 * 1024):
-    if not out_filename:
-        out_filename = in_filename + '.enc'
+def encrypt_file(key_path, in_file, out_file=None, chunk_size=64 * 1024):
+    if not out_file:
+        out_file = in_file + '.enc'
     if not key_path:
-        key = gen_key()
-        out_dir = get_dir(out_filename)
-        write_file(join_to_path(out_dir, 'secret.key'), key)
+        key = gen_key(get_dir(out_file))
     else:
-        key = read_file(key_path)
+        key = get_key(key_path)
 
     iv = gen_iv()
     encryptor = AES.new(key, AES.MODE_CBC, iv)
-    file_size = os.path.getsize(in_filename)
+    file_size = get_file_size(in_file)
 
-    with open(in_filename, 'rb') as infile:
-        with open(out_filename, 'wb') as outfile:
+    with open(in_file, 'rb') as infile:
+        with open(out_file, 'wb') as outfile:
             outfile.write(struct.pack('<Q', file_size))
             outfile.write(iv)
 
@@ -90,17 +105,17 @@ def encrypt_file(key_path, in_filename, out_filename=None, chunk_size=64 * 1024)
                 outfile.write(encryptor.encrypt(chunk))
 
 
-def decrypt_file(key_path, in_filename, out_filename=None, chunk_size=24 * 1024):
-    if not out_filename:
-        out_filename = in_filename[:-4]
+def decrypt_file(key_path, in_file, out_file=None, chunk_size=24 * 1024):
+    if not out_file:
+        out_file = in_file[:-4]
 
-    key = read_file(key_path)
-    with open(in_filename, 'rb') as infile:
+    key = get_key(key_path)
+    with open(in_file, 'rb') as infile:
         orig_size = struct.unpack('<Q', infile.read(struct.calcsize('Q')))[0]
         iv = infile.read(16)
         decryptor = AES.new(key, AES.MODE_CBC, iv)
 
-        with open(out_filename, 'wb') as outfile:
+        with open(out_file, 'wb') as outfile:
             while True:
                 chunk = infile.read(chunk_size)
                 if len(chunk) == 0:

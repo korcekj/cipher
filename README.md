@@ -10,19 +10,19 @@ A simple commandline app for encrypting and decrypting your files
 ```
 # Usage
 ```bash
-$ cipher
+$ cipher --help
 ```
 ## Encryption
-`-in <file_path>`
-`-out <file_path>`
-`-k <file_path>`
+* `-in <file_path> [required] - Cesta k súboru určeného na šifrovanie` 
+* `-out <file_path> - Cesta k výstupnému súboru, výsledok šifrovania` 
+* `-k <file_path> - Cesta k súboru kľúča, ak nie je poskytnutá, kľúč bude vygenerovaný vo výstupnej lokácii` 
 ```bash
-$ cipher e -in ./to_enc.txt
+$ cipher e -in your_dir/file.txt
 ```
 ## Decryption
-`-in <file_path>`
-`-out <file_path>`
-`-k <file_path>`
+* `-k <file_path> [required] - Cesta k súboru kľúča`
+* `-in <file_path> [required] - Cesta k zašifrovanému súboru`
+* `-out <file_path> - Cesta k vústupneému súboru, výsledok dešifrovania`
 ```bash
-$ cipher d -in ./to_enc.txt.enc -k ./secret.key
+$ cipher d -in your_dir/file.txt.enc -k your_dir/secret.key
 ```
